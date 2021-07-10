@@ -1,0 +1,16 @@
+.leaflet-container {
+    height: 600px;
+}
+
+.stop-icon {
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 1px 1px 10px black;
+    opacity: 0.6;
+}
+
+.stop-icon:after {
+    content:  "🚊";
+    font-size: 20px;
+    padding-left: 4px;
+}
