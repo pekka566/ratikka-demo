@@ -1,6 +1,6 @@
 import { ChangeEvent, ReactElement, useMemo, useState } from "react"
 import { useQuery } from "@apollo/client"
-import { GET_DATA } from "../../queries/getData"
+import { GET_ROUTES } from "../../queries/getRoutes"
 import { getLineNamesAndIds, getStops } from "./helpers"
 import { Info } from "../Info"
 import { LineSelect } from "../LineSelect"
@@ -14,16 +14,10 @@ const View = (): ReactElement => {
     setLine(event.target.value as string)
   }
 
-  const { loading, error, data } = useQuery(GET_DATA)
-
-  console.log("data...", data)
-  console.log("line...", line)
-
+  const { loading, error, data } = useQuery(GET_ROUTES)
   const lineNames = useMemo(() => getLineNamesAndIds(data), [data])
 
   const stops = getStops(line, data)
-
-  console.log("stops...", stops)
 
   return (
     <main>

@@ -11,7 +11,7 @@ const client = new ApolloClient({
 /*
 client
   .query({
-    query: GET_DATA
+    query: GET_ROUTES
   })
   .then((result) => console.log(result))
 */

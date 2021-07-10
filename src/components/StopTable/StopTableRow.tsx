@@ -2,13 +2,21 @@ import { ReactElement, useState } from "react"
 import Collapse from "@material-ui/core/Collapse"
 import TableCell from "@material-ui/core/TableCell"
 import TableRow from "@material-ui/core/TableRow"
-import Box from "@material-ui/core/Box"
-import Typography from "@material-ui/core/Typography"
 import IconButton from "@material-ui/core/IconButton"
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp"
+import { useLazyQuery } from "@apollo/client"
 
+import { GET_STOP } from "../../queries/getStop"
 import { Stop } from "../../types"
+import stopMockData from "../../testdata/stopMockData"
+import { convertStopData } from "./helpers"
+import { TimeTable } from "../TimeTable/TimeTable"
+
+// Stoptimes for trams are not returned yet from  https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql
+// Using static stop id to get results
+// const TEST_STOP_ID = "tampere:5021"
+// const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, "")
 
 type Props = {
   stop: Stop
@@ -22,14 +30,27 @@ const tableCellStyle = (open: boolean) => ({
 
 const StopTableRow = ({ stop }: Props): ReactElement => {
   const [open, setOpen] = useState(false)
-  const openStop = (id: string) => {
-    console.log(id)
+  const [stopData, setStopData] = useState<Stop | undefined>(undefined)
+  const [getStop, result] = useLazyQuery(GET_STOP, {
+    fetchPolicy: "network-only"
+  })
+
+  const openStop = (gtfsId: string) => {
+    // load stop timetables
+    // getStop({ variables: { gtfsId: TEST_STOP_ID } })
+    // TODO: find out why GraphQL call doesn't work
+    // Using mock-data
+
+    console.log("result...", result)
+
+    const data = convertStopData(stopMockData)
+    setStopData(data)
     setOpen(!open)
   }
 
   return (
     <>
-      <TableRow key={stop.id} onClick={() => openStop(stop.id)}>
+      <TableRow key={stop.id} onClick={() => openStop(stop.gtfsId)}>
         <TableCell style={tableCellStyle(open)}>
           <IconButton
             size="small"
@@ -42,19 +63,13 @@ const StopTableRow = ({ stop }: Props): ReactElement => {
         <TableCell component="th" scope="row" style={tableCellStyle(open)}>
           {stop.name}
         </TableCell>
-        <TableCell align="right" style={tableCellStyle(open)}>
-          Another
-        </TableCell>
+        <TableCell align="right" style={tableCellStyle(open)}></TableCell>
       </TableRow>
       {open && (
         <TableRow>
           <TableCell colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box margin={1}>
-                <Typography variant="h6" gutterBottom component="div">
-                  Something about something...
-                </Typography>
-              </Box>
+              <TimeTable stop={stopData} />
             </Collapse>
           </TableCell>
         </TableRow>

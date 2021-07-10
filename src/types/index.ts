@@ -1,4 +1,4 @@
-type Data = {
+type RouteData = {
   routes?: Array<Route>
 }
 
@@ -16,11 +16,50 @@ type Pattern = IdNamePair & {
   stops?: Array<Stop>
 }
 
-type Stop = IdNamePair
+type Stop = IdNamePair & {
+  gtfsId: string
+  departureTimes?: Array<Date>
+  lat: number
+  lon: number
+}
 
 type IdNamePair = {
   id: string
   name: string
 }
 
-export type { Data, Route, Pattern, Stop, IdNamePair }
+//  Data model of the stop in Digitransit
+type StopResultData = {
+  data: StopInData
+}
+
+type StopInData = {
+  stop: StopResult
+}
+
+type StopResult = IdNamePair & {
+  gtfsId: string
+  lat: number
+  lon: number
+  stoptimesForServiceDate?: Array<StoptimesForServiceDate>
+}
+type StoptimesForServiceDate = {
+  stoptimes?: Array<Stoptimes>
+}
+type Stoptimes = {
+  realtimeArrival: number
+  realtimeDeparture: number
+}
+
+export type {
+  RouteData,
+  Route,
+  Pattern,
+  Stop,
+  IdNamePair,
+  StopResultData,
+  StopResult,
+  StopInData,
+  StoptimesForServiceDate,
+  Stoptimes
+}

@@ -1,14 +1,14 @@
 import map from "lodash/map"
 import head from "lodash/head"
 
-import { Data, IdNamePair, Route, Stop } from "../../types"
+import { RouteData, IdNamePair, Route, Stop } from "../../types"
 
-const getRoute = (data: Data): Route | undefined => {
+const getRoute = (data: RouteData): Route | undefined => {
   // data contains only one route
   return head(data?.routes)
 }
 
-const getLineNamesAndIds = (data: Data): Array<IdNamePair> => {
+const getLineNamesAndIds = (data: RouteData): Array<IdNamePair> => {
   const route = getRoute(data)
   // each pattern has a name. Remove (tampere:xxxx) part of the name.
   return map(route?.patterns, (pattern) => ({
@@ -17,7 +17,7 @@ const getLineNamesAndIds = (data: Data): Array<IdNamePair> => {
   }))
 }
 
-const getStops = (lineId: string, data: Data): Array<Stop> | undefined => {
+const getStops = (lineId: string, data: RouteData): Array<Stop> | undefined => {
   if (!lineId) return undefined
   const route = getRoute(data)
   const pattern = route?.patterns?.find((x) => x.id === lineId)

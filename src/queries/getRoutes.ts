@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 
-const GET_DATA = gql`
+const GET_ROUTES = gql`
   query {
     routes(name: "3", transportModes: TRAM) {
       id
@@ -15,10 +15,11 @@ const GET_DATA = gql`
         stops {
           id
           name
+          gtfsId
         }
       }
     }
   }
 `
 
-export { GET_DATA }
+export { GET_ROUTES }

@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react"
+import { makeStyles } from "@material-ui/core"
 import Table from "@material-ui/core/Table"
 import TableBody from "@material-ui/core/TableBody"
 import TableCell from "@material-ui/core/TableCell"
@@ -11,14 +12,21 @@ type Props = {
   stops?: Array<Stop>
 }
 
+const useStyles = makeStyles(() => ({
+  tableHead: {
+    fontSize: "1.25rem"
+  }
+}))
+
 const StopTable = ({ stops }: Props): ReactElement => {
   if (!stops) return <></>
+  const { tableHead } = useStyles()
   return (
     <Table aria-label="stop table">
       <TableHead>
         <TableRow>
           <TableCell></TableCell>
-          <TableCell>Stop name</TableCell>
+          <TableCell className={tableHead}>Stop name</TableCell>
           <TableCell></TableCell>
         </TableRow>
       </TableHead>
