@@ -1,16 +1,12 @@
-import React, { ReactElement } from "react"
+import { ReactElement, useContext } from "react"
 import { makeStyles } from "@material-ui/core"
 import Table from "@material-ui/core/Table"
 import TableBody from "@material-ui/core/TableBody"
 import TableCell from "@material-ui/core/TableCell"
 import TableHead from "@material-ui/core/TableHead"
 import TableRow from "@material-ui/core/TableRow"
-import { Stop } from "../../types"
 import { StopTableRow } from "./StopTableRow"
-
-type Props = {
-  stops?: Array<Stop>
-}
+import { StopsContext } from "../View/StopsContext"
 
 const useStyles = makeStyles(() => ({
   tableHead: {
@@ -18,9 +14,10 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const StopTable = ({ stops }: Props): ReactElement => {
-  if (!stops) return <></>
+const StopTable = (): ReactElement => {
   const { tableHead } = useStyles()
+  const stops = useContext(StopsContext)
+  if (!stops) return <></>
   return (
     <Table aria-label="stop table">
       <TableHead>
@@ -32,7 +29,7 @@ const StopTable = ({ stops }: Props): ReactElement => {
       </TableHead>
       <TableBody>
         {stops.map((stop) => (
-          <StopTableRow stop={stop} key={stop.id} />
+          <StopTableRow stopId={stop.id} key={stop.id} />
         ))}
       </TableBody>
     </Table>

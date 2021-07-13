@@ -18,7 +18,7 @@ type Pattern = IdNamePair & {
 
 type Stop = IdNamePair & {
   gtfsId: string
-  departureTimes?: Array<Date>
+  stopTimes?: Times
   lat: number
   lon: number
 }
@@ -26,6 +26,10 @@ type Stop = IdNamePair & {
 type IdNamePair = {
   id: string
   name: string
+}
+
+type Times = {
+  departureTimes?: Array<Date>
 }
 
 //  Data model of the stop in Digitransit
@@ -61,5 +65,6 @@ export type {
   StopResult,
   StopInData,
   StoptimesForServiceDate,
-  Stoptimes
+  Stoptimes,
+  Times
 }

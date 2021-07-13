@@ -5,6 +5,7 @@ import { getLineNamesAndIds, getStops } from "./helpers"
 import { Info } from "../Info"
 import { LineSelect } from "../LineSelect"
 import { StopTable } from "../StopTable"
+import { StopsProvider } from "./StopsContext"
 
 const View = (): ReactElement => {
   const [line, setLine] = useState("")
@@ -16,18 +17,21 @@ const View = (): ReactElement => {
 
   const { loading, error, data } = useQuery(GET_ROUTES)
   const lineNames = useMemo(() => getLineNamesAndIds(data), [data])
-
   const stops = getStops(line, data)
+
+  // TODO: add loading and error handling
 
   return (
     <main>
-      <Info />
-      <LineSelect
-        lineNames={lineNames}
-        handleChange={handleChange}
-        selectedLine={line}
-      />
-      <StopTable stops={stops} />
+      <StopsProvider stops={stops}>
+        <Info />
+        <LineSelect
+          lineNames={lineNames}
+          handleChange={handleChange}
+          selectedLine={line}
+        />
+        <StopTable />
+      </StopsProvider>
     </main>
   )
 }
