@@ -16,6 +16,8 @@ const GET_ROUTES = gql`
           id
           name
           gtfsId
+          lat
+          lon
         }
       }
     }

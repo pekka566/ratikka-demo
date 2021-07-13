@@ -4,8 +4,9 @@ import flatMap from "lodash/flatMap"
 import {
   StopResultData,
   StoptimesForServiceDate,
-  Stop,
-  Stoptimes
+  Times,
+  Stoptimes,
+  Stop
 } from "../../types"
 
 const nowDate = new Date()
@@ -38,15 +39,17 @@ const getStopTimes = (
 const convertStopData = (
   stopResultData: StopResultData,
   maxNumOfResults = 5
-): Stop => {
+): Times => {
   const resultStop = stopResultData.data.stop
   const { stoptimesForServiceDate } = resultStop
   const departureTimes = getStopTimes(stoptimesForServiceDate, maxNumOfResults)
 
   return {
-    ...resultStop,
     departureTimes
   }
 }
 
-export { convertStopData }
+const getStop = (id: string, stops?: Array<Stop>): Stop | undefined =>
+  stops?.find((x) => x.id === id)
+
+export { convertStopData, getStop }

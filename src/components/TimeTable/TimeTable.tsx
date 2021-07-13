@@ -7,10 +7,11 @@ import TableCell from "@material-ui/core/TableCell"
 import { makeStyles } from "@material-ui/core/styles"
 import Grid from "@material-ui/core/Grid"
 
-import { Stop } from "../../types"
+import { Stop, Times } from "../../types"
 import { StopMap } from "../StopMap"
 
 type Props = {
+  stopTimes?: Times
   stop?: Stop
 }
 
@@ -29,11 +30,11 @@ const useStyles = makeStyles(() => ({
 
 const displayDate = (date: Date): string => dateFormat.format(date)
 
-const TimeTable = ({ stop }: Props): ReactElement => {
-  console.log("stop...", stop?.departureTimes)
+const TimeTable = ({ stopTimes, stop }: Props): ReactElement => {
+  const coordinatesMissing = !stop?.lat || !stop?.lon
   const { tableRow } = useStyles()
   return (
-    <div>
+    <>
       {stop && (
         <Grid container spacing={2}>
           <Grid item xs={12} sm={3}>
@@ -42,7 +43,7 @@ const TimeTable = ({ stop }: Props): ReactElement => {
             </Typography>
             <Table size="small" aria-label="purchases">
               <TableBody>
-                {stop.departureTimes?.map((departureTime) => (
+                {stopTimes?.departureTimes?.map((departureTime) => (
                   <TableRow key={departureTime.getTime()} className={tableRow}>
                     <TableCell>{displayDate(departureTime)}</TableCell>
                   </TableRow>
@@ -51,11 +52,11 @@ const TimeTable = ({ stop }: Props): ReactElement => {
             </Table>
           </Grid>
           <Grid item xs={12} sm={9}>
-            <StopMap stop={stop} />
+            {!coordinatesMissing && <StopMap stop={stop} />}
           </Grid>
         </Grid>
       )}
-    </div>
+    </>
   )
 }
 
