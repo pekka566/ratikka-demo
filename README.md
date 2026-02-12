@@ -2,6 +2,23 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Environment Setup
+
+1. Copy the example environment file:
+
+   ```bash
+   cp .env.example .env.development
+   ```
+
+2. Edit `.env.development` and configure the required variables:
+   - `REACT_APP_GRAPHQL_URI` - GraphQL API endpoint for Digitransit routing service
+   - `REACT_APP_NAME` - Application name displayed in the UI
+   - `REACT_APP_DEBUG` - Enable/disable debug mode
+
+3. For production, create `.env.production` with production-specific values.
+
+**Note:** Never commit `.env.development` or `.env.production` files containing sensitive data.
+
 ## Available Scripts
 
 In the project directory, you can run: TEST
@@ -18,6 +35,17 @@ You will also see any lint errors in the console.
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `yarn test:coverage`
+
+Runs all tests and generates a coverage report.\
+Coverage report will be output to the console and saved to the `coverage/` folder.
+
+To pass tests in CI mode without watch:
+
+```bash
+CI=true yarn test
+```
 
 ### `yarn build`
 

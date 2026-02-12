@@ -1,6 +1,5 @@
 import concat from "lodash/concat"
 import flatMap from "lodash/flatMap"
-
 import {
   StopResultData,
   StoptimesForServiceDate,

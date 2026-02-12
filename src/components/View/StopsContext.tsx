@@ -1,5 +1,4 @@
 import { createContext, PropsWithChildren, ReactElement } from "react"
-
 import { Stop } from "../../types"
 
 type Props = PropsWithChildren<{ stops?: Array<Stop> }>

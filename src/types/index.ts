@@ -19,8 +19,8 @@ type Pattern = IdNamePair & {
 type Stop = IdNamePair & {
   gtfsId: string
   stopTimes?: Times
-  lat: number
-  lon: number
+  lat?: number
+  lon?: number
 }
 
 type IdNamePair = {

@@ -1,29 +1,26 @@
-import { ChangeEvent, ReactElement } from "react"
-import { makeStyles } from "@material-ui/core/styles"
-import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core"
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent
+} from "@mui/material"
+import { ReactElement } from "react"
 import { IdNamePair } from "../../types"
 
 type Props = {
   lineNames: Array<IdNamePair>
-  handleChange: (event: ChangeEvent<{ value: unknown }>) => void
+  handleChange: (event: SelectChangeEvent<string>) => void
   selectedLine: string
 }
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(3),
-    minWidth: 200
-  }
-}))
 
 const LineSelect = ({
   lineNames,
   handleChange,
   selectedLine
 }: Props): ReactElement => {
-  const { formControl } = useStyles()
   return (
-    <FormControl className={formControl}>
+    <FormControl sx={{ margin: 3, minWidth: 200 }}>
       <InputLabel id="line-select-label">Line</InputLabel>
       <Select
         labelId="line-select-label"

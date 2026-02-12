@@ -1,6 +1,5 @@
-import map from "lodash/map"
 import head from "lodash/head"
-
+import map from "lodash/map"
 import { RouteData, IdNamePair, Route, Stop } from "../../types"
 
 const getRoute = (data: RouteData): Route | undefined => {
