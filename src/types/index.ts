@@ -18,6 +18,7 @@ type Pattern = IdNamePair & {
 
 type Stop = IdNamePair & {
   gtfsId: string
+  shortName?: string
   stopTimes?: Times
   lat?: number
   lon?: number
@@ -32,39 +33,4 @@ type Times = {
   departureTimes?: Array<Date>
 }
 
-//  Data model of the stop in Digitransit
-type StopResultData = {
-  data: StopInData
-}
-
-type StopInData = {
-  stop: StopResult
-}
-
-type StopResult = IdNamePair & {
-  gtfsId: string
-  lat: number
-  lon: number
-  stoptimesForServiceDate?: Array<StoptimesForServiceDate>
-}
-type StoptimesForServiceDate = {
-  stoptimes?: Array<Stoptimes>
-}
-type Stoptimes = {
-  realtimeArrival: number
-  realtimeDeparture: number
-}
-
-export type {
-  RouteData,
-  Route,
-  Pattern,
-  Stop,
-  IdNamePair,
-  StopResultData,
-  StopResult,
-  StopInData,
-  StoptimesForServiceDate,
-  Stoptimes,
-  Times
-}
+export type { RouteData, Route, Pattern, Stop, IdNamePair, Times }

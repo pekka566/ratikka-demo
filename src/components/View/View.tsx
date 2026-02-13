@@ -1,7 +1,6 @@
-import { useQuery } from "@apollo/client"
 import { SelectChangeEvent, CircularProgress, Alert, Box } from "@mui/material"
 import { ReactElement, useMemo, useState } from "react"
-import { GET_ROUTES } from "../../queries/getRoutes"
+import { useRoutes } from "../../hooks/useRoutes"
 import { Info } from "../Info"
 import { LineSelect } from "../LineSelect"
 import { StopTable } from "../StopTable"
@@ -15,7 +14,7 @@ const View = (): ReactElement => {
     setLine(event.target.value)
   }
 
-  const { loading, error, data } = useQuery(GET_ROUTES)
+  const { loading, error, data } = useRoutes("3")
   const lineNames = useMemo(() => getLineNamesAndIds(data), [data])
   const stops = getStops(line, data)
 
