@@ -22,12 +22,17 @@ const tableCellStyle = (open: boolean) => ({
 
 const StopTableRow = ({ stopId }: Props): ReactElement => {
   const [open, setOpen] = useState(false)
-  const stops = useContext(StopsContext)
+  const { stops, lineRef } = useContext(StopsContext)
   const stop = getStop(stopId, stops)
 
-  // Get real-time departures for this stop
+  // Get real-time departures only when row is expanded
   const stopShortName = stop?.shortName || stop?.gtfsId || stopId
-  const { departures } = useStopDepartures(stopShortName, "3")
+  const shouldFetch = open && !!stopShortName && !!lineRef
+  const { departures } = useStopDepartures(
+    stopShortName,
+    lineRef || "3",
+    shouldFetch
+  )
 
   const openStop = () => {
     setOpen(!open)

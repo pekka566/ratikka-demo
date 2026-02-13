@@ -33,4 +33,23 @@ type Times = {
   departureTimes?: Array<Date>
 }
 
-export type { RouteData, Route, Pattern, Stop, IdNamePair, Times }
+type VehicleLocation = {
+  vehicleRef: string
+  lineRef: string
+  latitude: number
+  longitude: number
+  bearing: number
+  delay: string
+  nextStop?: string
+  timestamp: Date
+}
+
+export type {
+  RouteData,
+  Route,
+  Pattern,
+  Stop,
+  IdNamePair,
+  Times,
+  VehicleLocation
+}

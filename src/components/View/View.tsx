@@ -4,7 +4,11 @@ import { useRoutes } from "../../hooks/useRoutes"
 import { Info } from "../Info"
 import { LineSelect } from "../LineSelect"
 import { StopTable } from "../StopTable"
-import { getLineNamesAndIds, getStops } from "./helpers"
+import {
+  getLineNamesAndIds,
+  getStops,
+  getLineRefFromPatternId
+} from "./helpers"
 import { StopsProvider } from "./StopsContext"
 
 const View = (): ReactElement => {
@@ -14,9 +18,12 @@ const View = (): ReactElement => {
     setLine(event.target.value)
   }
 
-  const { loading, error, data } = useRoutes("3")
+  // Memoize line IDs to prevent array reference change on each render
+  const lineIds = useMemo(() => ["1", "3"], [])
+  const { loading, error, data } = useRoutes(lineIds)
   const lineNames = useMemo(() => getLineNamesAndIds(data), [data])
   const stops = getStops(line, data)
+  const lineRef = getLineRefFromPatternId(line, data)
 
   if (loading) {
     return (
@@ -45,7 +52,7 @@ const View = (): ReactElement => {
 
   return (
     <main>
-      <StopsProvider stops={stops}>
+      <StopsProvider stops={stops} lineRef={lineRef}>
         <Info />
         <LineSelect
           lineNames={lineNames}

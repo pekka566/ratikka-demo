@@ -8,7 +8,7 @@ import { StopsContext } from "../View/StopsContext"
 import { StopTableRow } from "./StopTableRow"
 
 const StopTable = (): ReactElement => {
-  const stops = useContext(StopsContext)
+  const { stops } = useContext(StopsContext)
   if (!stops) return <></>
   return (
     <Table aria-label="stop table">

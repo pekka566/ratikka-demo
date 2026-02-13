@@ -1,12 +1,19 @@
 import { createContext, PropsWithChildren, ReactElement } from "react"
 import { Stop } from "../../types"
 
-type Props = PropsWithChildren<{ stops?: Array<Stop> }>
+type StopsContextValue = {
+  stops?: Array<Stop>
+  lineRef?: string
+}
 
-const StopsContext = createContext<Array<Stop> | undefined>(undefined)
+type Props = PropsWithChildren<StopsContextValue>
 
-const StopsProvider = ({ stops, children }: Props): ReactElement => (
-  <StopsContext.Provider value={stops}>{children}</StopsContext.Provider>
+const StopsContext = createContext<StopsContextValue>({})
+
+const StopsProvider = ({ stops, lineRef, children }: Props): ReactElement => (
+  <StopsContext.Provider value={{ stops, lineRef }}>
+    {children}
+  </StopsContext.Provider>
 )
 
 export { StopsContext, StopsProvider }

@@ -26,3 +26,25 @@
   font-size: 20px;
   padding-left: 4px;
 }
+
+.vehicle-icon {
+  border-radius: 50%;
+  box-shadow: 1px 1px 10px black;
+  opacity: 0.9;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.vehicle-icon-line-1 {
+  background-color: rgb(52, 152, 219);
+}
+
+.vehicle-icon-line-3 {
+  background-color: rgb(46, 204, 113);
+}
+
+.vehicle-icon:after {
+  content: "🚊";
+  font-size: 25px;
+  padding-left: 6px;
+}

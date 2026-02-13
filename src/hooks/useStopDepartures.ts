@@ -14,17 +14,25 @@ interface UseStopDeparturesResult {
  *
  * @param stopShortName - Stop ID (e.g., "0950", "0839")
  * @param lineRef - Line reference to filter vehicles (e.g., "3")
+ * @param enabled - Whether to fetch data (default: true)
  * @returns Array of departure times with loading/error states
  */
 export function useStopDepartures(
   stopShortName: string,
-  lineRef: string
+  lineRef: string,
+  enabled: boolean = true
 ): UseStopDeparturesResult {
   const [departures, setDepartures] = useState<Date[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
+    // Skip if not enabled or missing required params
+    if (!enabled || !stopShortName || !lineRef) {
+      setLoading(false)
+      return
+    }
+
     let isMounted = true
 
     async function fetchDepartures() {
@@ -60,7 +68,7 @@ export function useStopDepartures(
       isMounted = false
       clearInterval(interval)
     }
-  }, [stopShortName, lineRef])
+  }, [stopShortName, lineRef, enabled])
 
   return { departures, loading, error }
 }

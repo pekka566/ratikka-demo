@@ -1,4 +1,4 @@
-import { Pattern, Route, Stop } from "../types"
+import { Pattern, Route, Stop, VehicleLocation } from "../types"
 import {
   ItsFactoryJourneyPattern,
   ItsFactoryStopPoint,
@@ -109,4 +109,49 @@ export function extractDepartureTimes(
 
   // Sort by time ascending
   return departures.sort((a, b) => a.getTime() - b.getTime())
+}
+
+/**
+ * Transform vehicle activity data to simplified vehicle locations
+ */
+export function transformVehicleActivityToLocations(
+  activities: VehicleActivity[]
+): VehicleLocation[] {
+  const locations: VehicleLocation[] = []
+
+  for (const activity of activities) {
+    const journey = activity.monitoredVehicleJourney
+
+    // Parse coordinates
+    const latitude = parseFloat(journey.vehicleLocation.latitude)
+    const longitude = parseFloat(journey.vehicleLocation.longitude)
+
+    // Skip invalid coordinates
+    if (
+      isNaN(latitude) ||
+      isNaN(longitude) ||
+      (latitude === 0 && longitude === 0)
+    ) {
+      continue
+    }
+
+    // Parse bearing
+    const bearing = parseFloat(journey.bearing) || 0
+
+    // Get next stop from first onward call
+    const nextStop = journey.onwardCalls?.[0]?.stopPointName
+
+    locations.push({
+      vehicleRef: journey.vehicleRef,
+      lineRef: journey.lineRef,
+      latitude,
+      longitude,
+      bearing,
+      delay: journey.delay,
+      nextStop,
+      timestamp: new Date(activity.recordedAtTime)
+    })
+  }
+
+  return locations
 }

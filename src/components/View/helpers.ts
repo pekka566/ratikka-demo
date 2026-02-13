@@ -1,16 +1,12 @@
-import head from "lodash/head"
-import map from "lodash/map"
-import { RouteData, IdNamePair, Route, Stop } from "../../types"
-
-const getRoute = (data: RouteData | null): Route | undefined => {
-  // data contains only one route
-  return head(data?.routes)
-}
+import { RouteData, IdNamePair, Stop } from "../../types"
 
 const getLineNamesAndIds = (data: RouteData | null): Array<IdNamePair> => {
-  const route = getRoute(data)
-  // each pattern has a name (ItsFactory journey pattern name)
-  return map(route?.patterns, (pattern) => ({
+  // Collect all patterns from all routes
+  const allPatterns =
+    data?.routes?.flatMap((route) => route.patterns || []) || []
+
+  // Return pattern names and IDs
+  return allPatterns.map((pattern) => ({
     id: pattern.id,
     name: pattern.name
   }))
@@ -21,9 +17,30 @@ const getStops = (
   data: RouteData | null
 ): Array<Stop> | undefined => {
   if (!lineId) return undefined
-  const route = getRoute(data)
-  const pattern = route?.patterns?.find((x) => x.id === lineId)
-  return pattern?.stops
+
+  // Search for the pattern across all routes
+  for (const route of data?.routes || []) {
+    const pattern = route.patterns?.find((x) => x.id === lineId)
+    if (pattern) {
+      return pattern.stops
+    }
+  }
+
+  return undefined
 }
 
-export { getLineNamesAndIds, getStops }
+const getLineRefFromPatternId = (
+  patternId: string,
+  data: RouteData | null
+): string | undefined => {
+  // Find which route (line) this pattern belongs to
+  for (const route of data?.routes || []) {
+    const pattern = route.patterns?.find((x) => x.id === patternId)
+    if (pattern) {
+      return route.shortName
+    }
+  }
+  return undefined
+}
+
+export { getLineNamesAndIds, getStops, getLineRefFromPatternId }
