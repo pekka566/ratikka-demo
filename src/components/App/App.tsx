@@ -1,12 +1,14 @@
 import { ReactElement } from "react"
-
+import { ErrorBoundary } from "../ErrorBoundary"
 import { Header } from "../Header"
 import { View } from "../View"
 
 const App = (): ReactElement => (
   <>
     <Header title="Ratikka-demo" />
-    <View />
+    <ErrorBoundary>
+      <View />
+    </ErrorBoundary>
   </>
 )
 

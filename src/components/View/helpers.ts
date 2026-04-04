@@ -1,27 +1,46 @@
-import map from "lodash/map"
-import head from "lodash/head"
+import { RouteData, IdNamePair, Stop } from "../../types"
 
-import { RouteData, IdNamePair, Route, Stop } from "../../types"
+const getLineNamesAndIds = (data: RouteData | null): Array<IdNamePair> => {
+  // Collect all patterns from all routes
+  const allPatterns =
+    data?.routes?.flatMap((route) => route.patterns || []) || []
 
-const getRoute = (data: RouteData): Route | undefined => {
-  // data contains only one route
-  return head(data?.routes)
-}
-
-const getLineNamesAndIds = (data: RouteData): Array<IdNamePair> => {
-  const route = getRoute(data)
-  // each pattern has a name. Remove (tampere:xxxx) part of the name.
-  return map(route?.patterns, (pattern) => ({
+  // Return pattern names and IDs
+  return allPatterns.map((pattern) => ({
     id: pattern.id,
-    name: pattern.name?.replace(/\s*\(.*?\)\s*/g, " ").trim()
+    name: pattern.name
   }))
 }
 
-const getStops = (lineId: string, data: RouteData): Array<Stop> | undefined => {
+const getStops = (
+  lineId: string,
+  data: RouteData | null
+): Array<Stop> | undefined => {
   if (!lineId) return undefined
-  const route = getRoute(data)
-  const pattern = route?.patterns?.find((x) => x.id === lineId)
-  return pattern?.stops
+
+  // Search for the pattern across all routes
+  for (const route of data?.routes || []) {
+    const pattern = route.patterns?.find((x) => x.id === lineId)
+    if (pattern) {
+      return pattern.stops
+    }
+  }
+
+  return undefined
 }
 
-export { getLineNamesAndIds, getStops }
+const getLineRefFromPatternId = (
+  patternId: string,
+  data: RouteData | null
+): string | undefined => {
+  // Find which route (line) this pattern belongs to
+  for (const route of data?.routes || []) {
+    const pattern = route.patterns?.find((x) => x.id === patternId)
+    if (pattern) {
+      return route.shortName
+    }
+  }
+  return undefined
+}
+
+export { getLineNamesAndIds, getStops, getLineRefFromPatternId }

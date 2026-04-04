@@ -1,12 +1,10 @@
+import Grid from "@mui/material/Grid"
+import Table from "@mui/material/Table"
+import TableBody from "@mui/material/TableBody"
+import TableCell from "@mui/material/TableCell"
+import TableRow from "@mui/material/TableRow"
+import Typography from "@mui/material/Typography"
 import { ReactElement } from "react"
-import Table from "@material-ui/core/Table"
-import Typography from "@material-ui/core/Typography"
-import TableBody from "@material-ui/core/TableBody"
-import TableRow from "@material-ui/core/TableRow"
-import TableCell from "@material-ui/core/TableCell"
-import { makeStyles } from "@material-ui/core/styles"
-import Grid from "@material-ui/core/Grid"
-
 import { Stop, Times } from "../../types"
 import { StopMap } from "../StopMap"
 
@@ -20,19 +18,10 @@ const dateFormat = new Intl.DateTimeFormat("fi-FI", {
   minute: "numeric"
 })
 
-const useStyles = makeStyles(() => ({
-  tableRow: {
-    "&:last-child th, &:last-child td": {
-      borderBottom: 0
-    }
-  }
-}))
-
 const displayDate = (date: Date): string => dateFormat.format(date)
 
 const TimeTable = ({ stopTimes, stop }: Props): ReactElement => {
   const coordinatesMissing = !stop?.lat || !stop?.lon
-  const { tableRow } = useStyles()
   return (
     <>
       {stop && (
@@ -44,7 +33,14 @@ const TimeTable = ({ stopTimes, stop }: Props): ReactElement => {
             <Table size="small" aria-label="purchases">
               <TableBody>
                 {stopTimes?.departureTimes?.map((departureTime) => (
-                  <TableRow key={departureTime.getTime()} className={tableRow}>
+                  <TableRow
+                    key={departureTime.getTime()}
+                    sx={{
+                      "&:last-child th, &:last-child td": {
+                        borderBottom: 0
+                      }
+                    }}
+                  >
                     <TableCell>{displayDate(departureTime)}</TableCell>
                   </TableRow>
                 ))}

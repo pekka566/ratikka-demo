@@ -1,29 +1,21 @@
+import Table from "@mui/material/Table"
+import TableBody from "@mui/material/TableBody"
+import TableCell from "@mui/material/TableCell"
+import TableHead from "@mui/material/TableHead"
+import TableRow from "@mui/material/TableRow"
 import { ReactElement, useContext } from "react"
-import { makeStyles } from "@material-ui/core"
-import Table from "@material-ui/core/Table"
-import TableBody from "@material-ui/core/TableBody"
-import TableCell from "@material-ui/core/TableCell"
-import TableHead from "@material-ui/core/TableHead"
-import TableRow from "@material-ui/core/TableRow"
-import { StopTableRow } from "./StopTableRow"
 import { StopsContext } from "../View/StopsContext"
-
-const useStyles = makeStyles(() => ({
-  tableHead: {
-    fontSize: "1.25rem"
-  }
-}))
+import { StopTableRow } from "./StopTableRow"
 
 const StopTable = (): ReactElement => {
-  const { tableHead } = useStyles()
-  const stops = useContext(StopsContext)
+  const { stops } = useContext(StopsContext)
   if (!stops) return <></>
   return (
     <Table aria-label="stop table">
       <TableHead>
         <TableRow>
           <TableCell></TableCell>
-          <TableCell className={tableHead}>Stop name</TableCell>
+          <TableCell sx={{ fontSize: "1.25rem" }}>Stop name</TableCell>
           <TableCell></TableCell>
         </TableRow>
       </TableHead>

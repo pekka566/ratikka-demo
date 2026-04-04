@@ -1,20 +1,14 @@
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
+import Collapse from "@mui/material/Collapse"
+import IconButton from "@mui/material/IconButton"
+import TableCell from "@mui/material/TableCell"
+import TableRow from "@mui/material/TableRow"
 import { ReactElement, useContext, useState } from "react"
-import Collapse from "@material-ui/core/Collapse"
-import TableCell from "@material-ui/core/TableCell"
-import TableRow from "@material-ui/core/TableRow"
-import IconButton from "@material-ui/core/IconButton"
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown"
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp"
-import { Times } from "../../types"
-import stopMockData from "../../testdata/stopMockData"
-import { convertStopData, getStop } from "./helpers"
+import { useStopDepartures } from "../../hooks/useStopDepartures"
 import { TimeTable } from "../TimeTable/TimeTable"
 import { StopsContext } from "../View/StopsContext"
-
-// Stoptimes for trams are not returned yet from  https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql
-// Using static stop id to get results
-// const TEST_STOP_ID = "tampere:5021"
-// const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, "")
+import { getStop } from "./helpers"
 
 type Props = {
   stopId: string
@@ -28,18 +22,27 @@ const tableCellStyle = (open: boolean) => ({
 
 const StopTableRow = ({ stopId }: Props): ReactElement => {
   const [open, setOpen] = useState(false)
-  const [stopTimes, setStopTimes] = useState<Times | undefined>(undefined)
-  const openStop = (gtfsId: string) => {
-    const times = convertStopData(stopMockData)
-    setStopTimes(times)
+  const { stops, lineRef } = useContext(StopsContext)
+  const stop = getStop(stopId, stops)
+
+  // Get real-time departures only when row is expanded
+  const stopShortName = stop?.shortName || stop?.gtfsId || stopId
+  const shouldFetch = open && !!stopShortName && !!lineRef
+  const { departures } = useStopDepartures(
+    stopShortName,
+    lineRef || "3",
+    shouldFetch
+  )
+
+  const openStop = () => {
     setOpen(!open)
   }
 
-  const stops = useContext(StopsContext)
-  const stop = getStop(stopId, stops)
+  const stopTimes = { departureTimes: departures }
+
   const tableRow = stop ? (
     <>
-      <TableRow key={stop.id} onClick={() => openStop(stop.gtfsId)}>
+      <TableRow key={stop.id} onClick={openStop}>
         <TableCell style={tableCellStyle(open)}>
           <IconButton
             size="small"
